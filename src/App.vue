@@ -26,16 +26,10 @@ export default {
   },
   computed: {
     columns() {
-      return this.details.columns;
+      return this.payments.columns;
     },
     rows() {
-      // if (this.filter) {
-      //   return this.details.rows.filter(
-      //     item => item.date.substr(0, 4) === this.filter
-      //   );
-      // } else {
-      return this.details.rows;
-      // }
+      return this.payments.rows;
     }
   },
   async created() {
@@ -45,7 +39,10 @@ export default {
         this.getUserInfo()
       ]);
       this.menu = result[0].data.menuData;
-      this.details = result[0].data.paymentsData;
+      this.payments.columns = result[0].data.paymentsData.columns;
+      this.payments.rows = !Array.isArray(result[0].data.paymentsData.rows)
+        ? result[0].data.paymentsData.rows
+        : {};
       this.user = result[1].data.userData;
       this.loading = false;
     } catch (e) {
@@ -55,9 +52,9 @@ export default {
   },
   data() {
     return {
-      details: {
+      payments: {
         columns: [],
-        rows: []
+        rows: {}
       },
       error: false,
       filter: {
@@ -77,13 +74,38 @@ export default {
   },
   methods: {
     getReportData() {
-      return axios.post(`/report/payments`);
+      let start = moment()
+        .startOf("week")
+        .format("YYYY-MM-DD");
+      let end = moment()
+        .endOf("week")
+        .format("YYYY-MM-DD");
+      if (this.filter.week && this.filter.year) {
+        const d = this.filters.weeks.filter(
+          item => item.value === this.filter.week
+        );
+        start = d[0].start;
+        end = d[0].end;
+      }
+      if (this.filter.month && this.filter.year) {
+        start = `${this.filter.year}-${this.filter.month}-01`;
+        end = moment(start)
+          .endOf("month")
+          .format("YYYY-MM-DD");
+      }
+      return axios.post(`/report/payments?start=${start}&end=${end}`);
     },
     getUserInfo() {
       return axios.get("/user/get-info");
     },
-    setFilter(filter) {
+    async setFilter(filter) {
       this.filter = filter;
+      if (this.filter.week || this.filter.month) {
+        const { data } = await this.getReportData();
+        this.payments.rows = !Array.isArray(data.paymentsData.rows)
+          ? data.paymentsData.rows
+          : {};
+      }
     },
     updateWeeks(year) {
       this.filters.weeks = getWeeks(year);

@@ -11,7 +11,7 @@ export const getMonths = () => {
     date.set("month", i);
     months.push({
       text: date.format("MMMM"),
-      value: String(i)
+      value: date.format("MM")
     });
   }
   return months;
@@ -24,6 +24,8 @@ export const getWeeks = (year = moment().format("YYYY")) => {
   let i = 1;
   while (start.format("YYYY") <= year) {
     weeks.push({
+      end: end.format("YYYY-MM-DD"),
+      start: start.format("YYYY-MM-DD"),
       text: `${start.format("DD/MM")}-${end.format("DD/MM")}`,
       value: String(i)
     });

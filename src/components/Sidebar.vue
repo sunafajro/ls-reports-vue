@@ -36,7 +36,7 @@
           </select>
         </div>
         <div class="form-group">
-          <select class="form-control form-control-sm" @change="selectYear" v-model="year" v-if="Array.isArray(filters.years)">
+          <select :disabled="week === '' && month === ''" class="form-control form-control-sm" @change="selectYear" v-model="year" v-if="Array.isArray(filters.years)">
             <option :key="`opt-${item.value}`" v-for="item in filters.years" :value="item.value">{{ item.text }}</option>
           </select>
         </div>
