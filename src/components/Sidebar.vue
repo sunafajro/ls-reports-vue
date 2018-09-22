@@ -13,6 +13,15 @@
       <div v-if="user.role"><i>{{ user.role }}</i></div>
       <div v-if="user.roleId === '4'">{{ user.office }}</div>
     </div>
+    <div class="dropdown" v-if="Array.isArray(menu) && menu.length">
+      <button type="button" id="dropdownMenu" class="btn btn-default btn-sm btn-block dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+        <span class="fa fa-list-alt" aria-hidden="true"></span> Отчеты
+        <span class="caret"></span>
+      </button>
+      <ul class="dropdown-menu" aria-labelledby="dropdownMenu">
+        <li :key="item.id" v-for="item in menu"><a class="dropdown-item" :href="item.url">{{ item.label }}</a></li>
+      </ul>
+    </div>
     <div v-if="typeof filters === 'object' && Object.keys(filters).length">
       <h4>Фильтры:</h4>
       <form @submit.prevent="onSubmit">
@@ -65,6 +74,10 @@ export default {
     filters: {
       required: true,
       type: Object
+    },
+    menu: {
+      required: true,
+      type: Array
     },
     setFilter: {
       required: true,

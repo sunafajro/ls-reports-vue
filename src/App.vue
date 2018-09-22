@@ -4,7 +4,7 @@
       <div class="alert alert-warning" v-if="loading">Идет загрузка данных...</div>
       <div class="alert alert-danger" v-if="error">Произошла непредвиденная ошибка!</div>
     </div>
-    <Sidebar :filter="filter" :filters="filters" :setFilter="setFilter" :user="user" v-if="!loading" />
+    <Sidebar :filter="filter" :filters="filters" :menu="menu" :setFilter="setFilter" :user="user" v-if="!loading" />
     <Content :columns="columns" :rows="rows" v-if="!loading"/>
   </div>
 </template>
@@ -44,6 +44,7 @@ export default {
         this.getReportData(),
         this.getUserInfo()
       ]);
+      this.menu = result[0].data.menuData;
       this.details = result[0].data.paymentsData;
       this.user = result[1].data.userData;
       this.loading = false;
@@ -70,6 +71,7 @@ export default {
         years: getYears(this.nullYear)
       },
       loading: true,
+      menu: [],
       user: {}
     };
   },
