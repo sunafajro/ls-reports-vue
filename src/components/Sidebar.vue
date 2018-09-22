@@ -36,7 +36,7 @@
           </select>
         </div>
         <div class="form-group">
-          <select class="form-control form-control-sm" v-model="year" v-if="Array.isArray(filters.years)">
+          <select class="form-control form-control-sm" @change="selectYear" v-model="year" v-if="Array.isArray(filters.years)">
             <option :key="`opt-${item.value}`" v-for="item in filters.years" :value="item.value">{{ item.text }}</option>
           </select>
         </div>
@@ -62,6 +62,9 @@ export default {
     };
   },
   methods: {
+    selectYear(e) {
+      this.updateWeeks(parseInt(e.target.value));
+    },
     onSubmit() {
       this.setFilter({ month: this.month, week: this.week, year: this.year });
     }
@@ -80,6 +83,10 @@ export default {
       type: Array
     },
     setFilter: {
+      required: true,
+      type: Function
+    },
+    updateWeeks: {
       required: true,
       type: Function
     },

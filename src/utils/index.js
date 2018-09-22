@@ -22,7 +22,7 @@ export const getWeeks = (year = moment().format("YYYY")) => {
   let start = moment(`${year}-01-01`).startOf("week");
   let end = moment(`${year}-01-01`).endOf("week");
   let i = 1;
-  while (start.format("YYYY") === year) {
+  while (start.format("YYYY") <= year) {
     weeks.push({
       text: `${start.format("DD/MM")}-${end.format("DD/MM")}`,
       value: String(i)
