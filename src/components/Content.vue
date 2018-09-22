@@ -16,7 +16,7 @@
         </table>
       </div>
     </div>
-    <h3 class="text-center" v-if="typeof rows === 'object' && Object.keys(rows).length">
+    <h3 class="text-center" v-if="typeof rows === 'object' && Object.keys(rows).length > 1">
       <span title="Наличные"><i class="fa fa-money" aria-hidden="true"></i> {{ total.cash | formatNumber }}</span>&nbsp;&nbsp;<span title="Карта"><i class="fa fa-credit-card" aria-hidden="true"></i> {{ total.card | formatNumber  }}</span>&nbsp;&nbsp;<span title="Банк"><i class="fa fa-university" aria-hidden="true"></i> {{ total.bank | formatNumber  }}</span>&nbsp;&nbsp;<span title="Всего"><i class="fa fa-rub" aria-hidden="true"></i> {{ total.all | formatNumber  }}</span>
     </h3>
   </div>
