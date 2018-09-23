@@ -1,4 +1,4 @@
-# ls-student-vue
+# Reports VueJS application for Langschool Backend
 
 ## Project setup
 ```
