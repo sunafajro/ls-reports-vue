@@ -26,7 +26,10 @@
           </thead>
           <tbody v-if="Array.isArray(rows[office][date].rows) && rows[office][date].rows.length">
             <tr :class="row.active === '0' ? 'danger' : ''" :key="`tr-${row.id}`" v-for="row in rows[office][date].rows" >
-              <td :class="column.id === 'type' ? colors[row[column.id]] : ''" :key="`td-${row.id}-${column.id}`" :width="column.width" v-for="column in columns" v-if="column.show"><span v-if="row.active ==='1'">{{ row[column.id] }}</span><del v-if="row.active === '0'">{{ row[column.id] }}</del></td>
+              <td :class="column.id === 'type' ? colors[row[column.id]] : ''" :key="`td-${row.id}-${column.id}`" :width="column.width" v-for="column in columns" v-if="column.show">
+                <span v-if="row.active ==='1'">{{ row[column.id] }}</span>
+                <del v-if="row.active === '0'">{{ row[column.id] }}</del>
+              </td>
             </tr>
           </tbody>
         </table>
@@ -44,6 +47,8 @@
 <script>
 import moment from "moment";
 import numeral from "numeral";
+
+moment.locale("ru");
 
 export default {
   computed: {
@@ -76,7 +81,7 @@ export default {
   },
   filters: {
     formatDate(date) {
-      return moment(date).format('DD.MM.YYYY');
+      return moment(date).format("DD.MM.YYYY");
     },
     formatNumber(value) {
       return numeral(value).format("0,0");
