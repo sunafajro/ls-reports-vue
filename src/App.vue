@@ -4,7 +4,15 @@
       <div class="alert alert-warning" v-if="loading">Идет загрузка данных...</div>
       <div class="alert alert-danger" v-if="error">Произошла непредвиденная ошибка!</div>
     </div>
-    <Sidebar :filter="filter" :filters="filters" :menu="menu" :setFilter="setFilter" :updateWeeks="updateWeeks" :user="user" v-if="!loading" />
+    <Sidebar
+      :filter="filter"
+      :filters="filters"
+      :menu="menu"
+      :setFilter="setFilter"
+      :updateWeeks="updateWeeks"
+      :user="user"
+      v-if="!loading"
+    />
     <Content :columns="columns" :rows="rows" v-if="!loading"/>
   </div>
 </template>

@@ -1,10 +1,10 @@
 <template>
   <ul class="breadcrumb">
     <li :class="link.style" :key="'ul-' + link.id" v-for="link in links">
-        <a :href="link.url" v-if="link.url">{{ link.text }}</a>
-        <span v-if="!link.url">{{ link.text }}</span>
+      <a :href="link.url" v-if="link.url">{{ link.text }}</a>
+      <span v-if="!link.url">{{ link.text }}</span>
     </li>
-  </ul>    
+  </ul>
 </template>
 
 <script>
@@ -13,25 +13,25 @@ export default {
     return {
       links: [
         {
-          id: 'home',
+          id: "home",
           style: null,
-          text: 'Главная',
-          url: '/',
+          text: "Главная",
+          url: "/"
         },
         {
-          id: 'reports',
+          id: "reports",
           style: null,
-          text: 'Отчеты',
-          url: '/report/index',
+          text: "Отчеты",
+          url: "/report/index"
         },
         {
-          id: 'payments',
-          style: 'active',
-          text: 'Отчет по оплатам',
-          url: null,
-        },
+          id: "payments",
+          style: "active",
+          text: "Отчет по оплатам",
+          url: null
+        }
       ]
     };
   }
-}
+};
 </script>
