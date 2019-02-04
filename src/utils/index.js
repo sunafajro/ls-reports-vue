@@ -38,14 +38,8 @@ export const getWeeks = (year = moment().format("YYYY")) => {
 
 export const getYears = (nullYear = parseInt(moment().format("YYYY"))) => {
   const years = [];
-  while (
-    nullYear !==
-    parseInt(
-      moment()
-        .add(1, "year")
-        .format("YYYY")
-    )
-  ) {
+  nullYear = !isNaN(nullYear) ? nullYear : parseInt(moment().format("YYYY"));
+  while (nullYear <= parseInt(moment().format("YYYY"))) {
     years.push({
       text: String(nullYear),
       value: String(nullYear)
