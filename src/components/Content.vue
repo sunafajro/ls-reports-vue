@@ -1,6 +1,7 @@
 <template>
   <div class="col-xs-12 col-sm-12 col-md-10 col-lg-10 col-xl-10">
-    <div :key="office" v-for="office in Object.keys(rows)" v-if="typeof rows === 'object' && Object.keys(rows).length">
+    <breadcrumbs-component />
+    <div :key="office" v-for="office in Object.keys(rows)">
       <h3>
         {{ rows[office].name }}&nbsp;&nbsp;
         <small>
@@ -10,7 +11,7 @@
           <span title="Всего"><i class="fa fa-rub" aria-hidden="true"></i> {{ rows[office].counts.all | formatNumber  }}</span>
         </small>
       </h3>
-      <div :key="date" v-for="date in Object.keys(rows[office])" v-if="typeof rows === 'object' && Object.keys(rows[office]).length > 1 && date !== 'name' && date !== 'counts'">
+      <div :key="date" v-for="date in filteredRows(rows[office])">
         <h4>
           {{ date | formatDate }}&nbsp;&nbsp;
           <small>
@@ -22,11 +23,11 @@
         </h4>
         <table class="table table-striped table-bordered table-hover table-condensed small">
           <thead v-if="columns.length">
-            <th :key="`th-${column.id}`" v-for="column in columns" v-if="column.show">{{ column.name }}</th>
+            <th :key="`th-${column.id}`" v-for="column in visibleColumns">{{ column.name }}</th>
           </thead>
           <tbody v-if="Array.isArray(rows[office][date].rows) && rows[office][date].rows.length">
             <tr :class="row.active === '0' ? 'danger' : ''" :key="`tr-${row.id}`" v-for="row in rows[office][date].rows" >
-              <td :class="column.id === 'type' ? colors[row[column.id]] : ''" :key="`td-${row.id}-${column.id}`" :width="column.width" v-for="column in columns" v-if="column.show">
+              <td :class="column.id === 'type' ? colors[row[column.id]] : ''" :key="`td-${row.id}-${column.id}`" :width="column.width" v-for="column in visibleColumns">
                 <span v-if="row.active ==='1'">{{ row[column.id] }}</span>
                 <del v-if="row.active === '0'">{{ row[column.id] }}</del>
               </td>
@@ -47,10 +48,14 @@
 <script>
 import moment from "moment";
 import numeral from "numeral";
+import Breadcrumbs from "./Breadcrumbs.vue";
 
 moment.locale("ru");
 
 export default {
+  components: {
+    "breadcrumbs-component": Breadcrumbs
+  },
   computed: {
     total() {
       const result = {
@@ -68,6 +73,9 @@ export default {
         });
       }
       return result;
+    },
+    visibleColumns() {
+      return this.columns.filter(c => c.show);
     }
   },
   data() {
@@ -86,6 +94,11 @@ export default {
     formatNumber(value) {
       return numeral(value).format("0,0");
     }
+  },
+  methods: {
+    filteredRows(rows) {
+      return Object.keys(rows).filter(r => r !== 'name' && r !== 'counts' );
+    },
   },
   props: {
     columns: {
