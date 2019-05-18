@@ -8,6 +8,7 @@
       :filter="filter"
       :filters="filters"
       :menu="menu"
+      :mode="mode"
       :setFilter="setFilter"
       :updateWeeks="updateWeeks"
       :user="user"
@@ -120,6 +121,10 @@ export default {
     }
   },
   props: {
+    mode: {
+      required: true,
+      type: String
+    },
     nullYear: {
       required: true,
       type: Number

@@ -1,7 +1,7 @@
 <template>
   <div class="col-xs-12 col-sm-12 col-md-2 col-lg-2 col-xl-2">
     <div class="alert alert-danger" v-if="typeof user !== 'object'">Ошибка загрузки данных!</div>
-    <nav-component/>
+    <nav-component v-if="mode === 'bitrix'"/>
     <div class="well well-sm small" v-if="typeof user === 'object' && Object.keys(user).length">
       <div v-if="!user.teacherId">
         <b v-if="user.name">{{ user.name }}</b>
@@ -128,6 +128,10 @@ export default {
     menu: {
       required: true,
       type: Array
+    },
+    mode: {
+      required: true,
+      type: String,
     },
     setFilter: {
       required: true,

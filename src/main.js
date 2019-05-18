@@ -1,8 +1,8 @@
-import Vue from "vue";
-import App from "./App.vue";
-import store from "./store";
+import Vue from 'vue';
+import App from './App.vue';
+import store from './store';
 
-const el = document.getElementById("app");
+const el = document.getElementById('app');
 Vue.config.productionTip = false;
 
 new Vue({
@@ -10,7 +10,8 @@ new Vue({
   render: h =>
     h(App, {
       props: {
-        nullYear: parseInt(el.dataset.nullyear)
-      }
-    })
-}).$mount("#app");
+        mode: el.dataset.mode,
+        nullYear: parseInt(el.dataset.nullyear),
+      },
+    }),
+}).$mount('#app');
