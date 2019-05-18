@@ -61,7 +61,10 @@
                 :width="column.width"
                 v-for="column in visibleColumns"
               >
-                <span v-if="row.active ==='1'">{{ row[column.id] }}</span>
+                <span v-if="row.active ==='1'">
+                  <span v-if="!column.icon">{{ row[column.id] }}</span>
+                  <i :class="column.icon + ' ' + row[column.id]" aria-hidden="true" v-if="column.icon && row[column.id]"></i>
+                </span>
                 <del v-if="row.active === '0'">{{ row[column.id] }}</del>
               </td>
             </tr>
