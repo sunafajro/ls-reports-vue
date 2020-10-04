@@ -2,7 +2,6 @@
   <div class="row">
     <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
       <div class="alert alert-warning" v-if="loading">Идет загрузка данных...</div>
-      <div class="alert alert-danger" v-if="error">Произошла непредвиденная ошибка!</div>
     </div>
     <Sidebar
       :filter="filter"
@@ -10,7 +9,6 @@
       :menu="menu"
       :mode="mode"
       :setFilter="setFilter"
-      :updateWeeks="updateWeeks"
       :user="user"
       v-if="!loading"
     />
@@ -21,11 +19,15 @@
 <script>
 import axios from "axios";
 import moment from "moment";
+import Noty from 'noty';
 import Content from "./components/Content.vue";
 import Sidebar from "./components/Sidebar.vue";
-import { getMonths, getWeeks, getYears } from "./utils";
+import { getMonths, getYears } from "./utils";
 
 moment.locale("ru");
+
+const el = document.getElementById('app');
+const urlPrefix = el.dataset.urlPrefix;
 
 export default {
   name: "app",
@@ -48,18 +50,25 @@ export default {
         this.getUserInfo()
       ]);
       this.menu = result[0].data.menuData;
-      this.payments.columns = result[0].data.paymentsData.columns;
-      this.payments.rows = !Array.isArray(result[0].data.paymentsData.rows)
-        ? result[0].data.paymentsData.rows
+      this.payments.columns = result[0].data.salariesData.columns;
+      this.payments.rows = !Array.isArray(result[0].data.salariesData.rows)
+        ? result[0].data.salariesData.rows
         : {};
       this.user = result[1].data.userData;
       this.loading = false;
     } catch (e) {
       this.error = true;
-      this.loading = false;
+      new Noty({
+        theme: 'bootstrap-v3',
+        text: 'При загрузке данных произошла ошибка.',
+        timeout: 3000,
+        type: 'danger',
+        progressBar: false,
+      }).show();
     }
   },
   data() {
+    let month = moment().month();
     return {
       payments: {
         columns: [],
@@ -67,17 +76,17 @@ export default {
       },
       error: false,
       filter: {
-        month: "",
-        week: String(moment().week()),
+        month: month > 9 ? month : `0${month}`,
         year: String(moment().year())
       },
       filters: {
         months: getMonths(),
-        weeks: getWeeks(moment().format("YYYY")),
         years: getYears(this.nullYear)
       },
       loading: true,
       menu: [],
+      mode: el.dataset.mode,
+      nullYear: parseInt(el.dataset.nullYear),
       user: {}
     };
   },
@@ -89,46 +98,26 @@ export default {
       let end = moment()
         .endOf("week")
         .format("YYYY-MM-DD");
-      if (this.filter.week && this.filter.year) {
-        const d = this.filters.weeks.filter(
-          item => item.value === this.filter.week
-        );
-        start = d[0].start;
-        end = d[0].end;
-      }
       if (this.filter.month && this.filter.year) {
         start = `${this.filter.year}-${this.filter.month}-01`;
         end = moment(start)
           .endOf("month")
           .format("YYYY-MM-DD");
       }
-      return axios.post(`/report/payments?start=${start}&end=${end}`);
+      return axios.post(`${urlPrefix}/report/salaries?start=${start}&end=${end}`);
     },
     getUserInfo() {
-      return axios.get("/user/get-info");
+      return axios.get(`${urlPrefix}/user/app-info`);
     },
     async setFilter(filter) {
       this.filter = filter;
-      if (this.filter.week || this.filter.month) {
+      if (this.filter.month) {
         const { data } = await this.getReportData();
-        this.payments.rows = !Array.isArray(data.paymentsData.rows)
-          ? data.paymentsData.rows
+        this.payments.rows = !Array.isArray(data.salariesData.rows)
+          ? data.salariesData.rows
           : {};
       }
     },
-    updateWeeks(year) {
-      this.filters.weeks = getWeeks(year);
-    }
-  },
-  props: {
-    mode: {
-      required: true,
-      type: String
-    },
-    nullYear: {
-      required: true,
-      type: Number
-    }
   }
 };
 </script>

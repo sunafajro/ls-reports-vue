@@ -39,21 +39,6 @@
       <form @submit.prevent="onSubmit">
         <div class="form-group">
           <select
-            :disabled="month !== ''"
-            class="form-control form-control-sm"
-            v-model="week"
-            v-if="Array.isArray(filters.weeks)"
-          >
-            <option
-              :key="`opt-${item.value}`"
-              v-for="item in filters.weeks"
-              :value="item.value"
-            >{{ item.text }}</option>
-          </select>
-        </div>
-        <div class="form-group">
-          <select
-            :disabled="week !== ''"
             class="form-control form-control-sm"
             v-model="month"
             v-if="Array.isArray(filters.months)"
@@ -67,9 +52,7 @@
         </div>
         <div class="form-group">
           <select
-            :disabled="week === '' && month === ''"
             class="form-control form-control-sm"
-            @change="selectYear"
             v-model="year"
             v-if="Array.isArray(filters.years)"
           >
@@ -98,7 +81,7 @@ export default {
     "nav-component": Navigation
   },
   created() {
-    this.week = this.filter.week;
+    this.month = this.filter.month;
     this.year = this.filter.year;
   },
   data() {
@@ -109,9 +92,6 @@ export default {
     };
   },
   methods: {
-    selectYear(e) {
-      this.updateWeeks(parseInt(e.target.value));
-    },
     onSubmit() {
       this.setFilter({ month: this.month, week: this.week, year: this.year });
     }
@@ -134,10 +114,6 @@ export default {
       type: String,
     },
     setFilter: {
-      required: true,
-      type: Function
-    },
-    updateWeeks: {
       required: true,
       type: Function
     },

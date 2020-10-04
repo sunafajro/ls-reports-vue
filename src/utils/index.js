@@ -17,25 +17,6 @@ export const getMonths = () => {
   return months;
 };
 
-export const getWeeks = (year = moment().format("YYYY")) => {
-  const weeks = [{ text: "-выбрать неделю-", value: "" }];
-  let start = moment(`${year}-01-01`).startOf("week");
-  let end = moment(`${year}-01-01`).endOf("week");
-  let i = 1;
-  while (start.format("YYYY") <= year) {
-    weeks.push({
-      end: end.format("YYYY-MM-DD"),
-      start: start.format("YYYY-MM-DD"),
-      text: `${start.format("DD/MM")}-${end.format("DD/MM")}`,
-      value: String(i)
-    });
-    start = start.add(1, "week");
-    end = end.add(1, "week");
-    i++;
-  }
-  return weeks;
-};
-
 export const getYears = (nullYear = parseInt(moment().format("YYYY"))) => {
   const years = [];
   nullYear = !isNaN(nullYear) ? nullYear : parseInt(moment().format("YYYY"));

@@ -1,17 +1,6 @@
-import Vue from 'vue';
+import { createApp } from 'vue';
 import App from './App.vue';
-import store from './store';
+import 'noty/lib/themes/bootstrap-v3.css';
+import 'noty/lib/noty.css';
 
-const el = document.getElementById('app');
-Vue.config.productionTip = false;
-
-new Vue({
-  store,
-  render: h =>
-    h(App, {
-      props: {
-        mode: el.dataset.mode,
-        nullYear: parseInt(el.dataset.nullyear),
-      },
-    }),
-}).$mount('#app');
+createApp(App).mount('#app');
